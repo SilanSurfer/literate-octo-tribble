@@ -24,7 +24,7 @@ impl TypeAnalyzer {
 
     pub async fn check_line(&mut self, line: String) -> Result<(), AppError> {
         let serde_value: serde_json::Map<String, Value> = serde_json::from_str(&line)?;
-        println!("{:?}", serde_value);
+        log::trace!("Checking object: {:?}", serde_value);
         if let Some(type_val) = serde_value.get("type") {
             match type_val.as_str() {
                 Some(name) => {
@@ -33,6 +33,7 @@ impl TypeAnalyzer {
                     if let Some(val) = db.get_mut(name) {
                         val.byte_size += size;
                         val.count += 1;
+                        log::debug!("Updating type {} with byte size: {}", name, size);
                     } else {
                         db.insert(
                             name.to_string(),
@@ -41,6 +42,7 @@ impl TypeAnalyzer {
                                 byte_size: size,
                             },
                         );
+                        log::debug!("Inserting type {} with byte size: {}", name, size);
                     }
                 }
                 None => {
@@ -54,6 +56,7 @@ impl TypeAnalyzer {
     }
 
     pub fn calculate_size(json_object_map: &serde_json::Map<String, Value>) -> u128 {
+        log::trace!("Calculating size for {:?}", json_object_map);
         let mut byte_size = 0;
         for (_, val) in json_object_map {
             match val {
@@ -78,6 +81,6 @@ impl TypeAnalyzer {
                 Cell::new(&val.byte_size.to_string()),
             ]));
         }
-        table.printstd();
+        table.print_tty(true);
     }
 }
