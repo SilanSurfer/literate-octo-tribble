@@ -7,7 +7,10 @@ use std::mem;
 use std::path::PathBuf;
 use std::sync::Mutex;
 use structopt::StructOpt;
-use thiserror::Error;
+
+mod error;
+
+use crate::error::AppError;
 
 #[derive(Debug, Default)]
 pub struct TypeAnalyzer {
@@ -85,18 +88,6 @@ impl TypeAnalyzer {
 pub struct TypeData {
     count: u128,
     byte_size: u128,
-}
-
-#[derive(Error, Debug)]
-pub enum AppError {
-    #[error("IO error: {0}")]
-    IoError(#[from] std::io::Error),
-    #[error("Serde JSON error: {0}")]
-    SerdeJsonError(#[from] serde_json::Error),
-    #[error("No field \"type\" in JSON: {0}")]
-    NoFieldTypeInJson(String),
-    #[error("Field \"type\" is not a String, JSON: {0}")]
-    FieldTypeIsNotString(String),
 }
 
 #[derive(Debug, StructOpt)]
