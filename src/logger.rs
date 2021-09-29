@@ -27,6 +27,9 @@ pub fn configure_logger(verbose: u8) {
                 log::Level::Info => {
                     level_style.set_color(Color::Green);
                 }
+                log::Level::Debug => {
+                    level_style.set_color(Color::Blue);
+                }
                 _ => {}
             }
             writeln!(

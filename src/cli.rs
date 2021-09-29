@@ -7,6 +7,7 @@ pub struct CliArgs {
     /// The path to the file to read
     pub input_file_path: PathBuf,
     /// Path of the output file. By default output is printed into stdout.
+    /// Not supported yet.
     #[structopt(short = "o", long)]
     pub output_file_path: Option<PathBuf>,
     /// Verbosity level

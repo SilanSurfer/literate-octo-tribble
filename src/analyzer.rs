@@ -56,7 +56,6 @@ impl TypeAnalyzer {
     }
 
     pub fn calculate_size(json_object_map: &serde_json::Map<String, Value>) -> u128 {
-        log::trace!("Calculating size for {:?}", json_object_map);
         let mut byte_size = 0;
         for (_, val) in json_object_map {
             match val {
@@ -65,6 +64,7 @@ impl TypeAnalyzer {
                 _ => byte_size += mem::size_of_val(&val) as u128,
             }
         }
+        log::trace!("Size for {:?} is {}", json_object_map, byte_size);
         byte_size
     }
 
